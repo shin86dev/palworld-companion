@@ -60,7 +60,9 @@ jobs:
       - name: Upload installer artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: PalPlus-Windows-${{ github.ref_name }}
+          # github.ref_name is "<pr-number>/merge" for pull-request runs;
+          # use the SHA so the artifact name stays portable on Windows too.
+          name: PalPlus-Windows-${{ github.sha }}
           path: |
             dist/installer/PalPlus-Setup.exe
             dist/installer/PalPlus-Setup.exe.sha256
