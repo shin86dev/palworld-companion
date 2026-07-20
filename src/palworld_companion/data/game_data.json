@@ -1,0 +1,283 @@
+{
+  "bundle_version": "0.6.0",
+  "game_version": "1.0",
+  "created": "2026-07-13",
+  "fragments": ["fast_travel.json", "alpha_pals.json", "alpha_first_clear.json"],
+  "coverage": {
+    "status": "limited-audited-coverage",
+    "message": "Ancient Civilization Core and Pure Quartz planning, 171 attributed travel waypoints including 22 map-reveal watchtowers, and 90 attributed Alpha Pal POIs are covered for Palworld 1.0. Unsupported recommendations remain withheld."
+  },
+  "sources": [
+    {
+      "id": "user-approved-plan",
+      "name": "User-approved Palworld Companion plan",
+      "url": "local://approved-plan",
+      "coverage": ["product-boundaries", "privacy", "planner-shape"],
+      "reuse_status": "local-design-input",
+      "game_version": "not-applicable",
+      "last_checked": "2026-07-13",
+      "confidence": "verified",
+      "contradictions": []
+    },
+    {
+      "id": "paldb-core-1.0",
+      "name": "PalDB: Ancient Civilization Core",
+      "url": "https://paldb.cc/Ancient_Civilization_Core",
+      "coverage": ["core-drops", "core-world-tree-rewards"],
+      "reuse_status": "citation-only",
+      "game_version": "1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified",
+      "contradictions": []
+    },
+    {
+      "id": "paldb-expeditions-1.0",
+      "name": "PalDB: Pal Expedition Station",
+      "url": "https://paldb.cc/en/Pal_Expedition_Station",
+      "coverage": ["expedition-rewards", "expedition-unlocks"],
+      "reuse_status": "citation-only",
+      "game_version": "1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified",
+      "contradictions": []
+    },
+    {
+      "id": "paldb-pure-quartz-1.0",
+      "name": "PalDB: Pure Quartz",
+      "url": "https://paldb.cc/en/Pure_Quartz",
+      "coverage": ["quartz-acquisition", "quartz-recipes", "quartz-automation"],
+      "reuse_status": "citation-only",
+      "game_version": "1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified",
+      "contradictions": []
+    },
+    {
+      "id": "paldb-crude-oil-1.0",
+      "name": "PalDB: Crude Oil",
+      "url": "https://paldb.cc/en/Crude_Oil",
+      "coverage": ["crude-oil-acquisition", "crude-oil-recipes"],
+      "reuse_status": "citation-only",
+      "game_version": "1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified-with-conflict",
+      "contradictions": ["The indexed Plasteel page shows a different current Crude Oil input than the 1.0 Crude Oil page."]
+    },
+    {
+      "id": "paldb-plasteel-indexed",
+      "name": "PalDB: Plasteel",
+      "url": "https://paldb.cc/en/Plasteel",
+      "coverage": ["plasteel-recipe"],
+      "reuse_status": "citation-only-conflicting",
+      "game_version": "0.7.3-indexed",
+      "last_checked": "2026-07-13",
+      "confidence": "needs-verification",
+      "contradictions": ["Its oil input conflicts with the current 1.0 Crude Oil record."]
+    },
+    {
+      "id": "paldb-ancient-bark-1.0",
+      "name": "PalDB: Ancient Bark",
+      "url": "https://paldb.cc/en/Ancient_Bark",
+      "coverage": ["ancient-bark-uses"],
+      "reuse_status": "citation-only",
+      "game_version": "1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified",
+      "contradictions": []
+    },
+    {
+      "id": "paldb-ancient-tech-1.0",
+      "name": "PalDB: Ancient Technology",
+      "url": "https://paldb.cc/en/Ancient_Technology",
+      "coverage": ["ancient-technology-points-overview"],
+      "reuse_status": "citation-only",
+      "game_version": "1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified",
+      "contradictions": []
+    }
+  ],
+  "facts": [
+    {
+      "id": "ancient-core-expedition-yields",
+      "title": "Ancient Civilization Core expedition yields",
+      "category": "acquisition",
+      "aliases": ["ancient civilization core", "ancient civilization cores", "acc", "core farming", "expedition cores"],
+      "summary": "Current 1.0 expedition rewards include guaranteed Ancient Civilization Cores: Celestial Sakura 1–2, Dark Cave of Feybreak 2–3, Sunreach Isle 3–4, and World Tree 3–5; World Tree Hard lists 6–9 at 50%.",
+      "source_id": "paldb-expeditions-1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    },
+    {
+      "id": "ancient-core-world-tree-sources",
+      "title": "Ancient Civilization Core World Tree sources",
+      "category": "acquisition",
+      "aliases": ["world tree core", "ancient relic recycler", "world tree treasure"],
+      "summary": "World Tree expedition, treasure, recycler, junk, fishing, and fishpond reward tables include Ancient Civilization Cores with different quantities and probabilities.",
+      "source_id": "paldb-core-1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    },
+    {
+      "id": "ancient-core-raid-drops",
+      "title": "Ancient Civilization Core raid drops",
+      "category": "acquisition",
+      "aliases": ["raid boss core", "bellanoir core", "blazamut ryu core", "xenolord core"],
+      "summary": "Current drop data lists Ancient Civilization Cores from Bellanoir variants, Blazamut Ryu variants, Xenolord, Silvance, and Dandilord encounters.",
+      "source_id": "paldb-core-1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    },
+    {
+      "id": "pure-quartz-quarry",
+      "title": "Pure Quartz Quarry automation",
+      "category": "automation",
+      "aliases": ["pure quartz", "quartz quarry", "automate quartz", "circuit board", "soralite ingot"],
+      "summary": "PalDB's 1.0 record lists the Pure Quartz Quarry at Technology level 52. It costs 70 Stone, 100 Pure Quartz, 30 Paldium Fragments, and 10 Ancient Civilization Parts, allowing quartz production at an existing base after the bootstrap cost.",
+      "source_id": "paldb-pure-quartz-1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    },
+    {
+      "id": "pure-quartz-expedition-bootstrap",
+      "title": "Pure Quartz expedition bootstrap",
+      "category": "acquisition",
+      "aliases": ["pure quartz", "quartz farm", "snow expedition", "bootstrap quartz"],
+      "summary": "PalDB's 1.0 record lists 20-40 Pure Quartz from the Snow expedition at 100%, and 10-20 from Snow Hard at 100%. This can bootstrap the 100 Quartz needed for a quarry without moving a base.",
+      "source_id": "paldb-pure-quartz-1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    },
+    {
+      "id": "crude-oil-scope",
+      "title": "Crude Oil sources; retirement calculation withheld",
+      "category": "scope-note",
+      "aliases": ["crude oil", "oil extractor", "oil extractors", "retire oil", "plasteel"],
+      "summary": "The current 1.0 Crude Oil record confirms extraction, oil-rig chests, and guaranteed 15-30 rewards from Sakurajima and Feybreak expeditions. The companion does not yet recommend retiring extractors because PalDB's indexed Crude Oil and Plasteel pages disagree on the current Plasteel oil input.",
+      "source_id": "paldb-crude-oil-1.0",
+      "related_source_ids": ["paldb-plasteel-indexed"],
+      "contradictions": ["Current indexed PalDB pages disagree on the Crude Oil quantity used by one Plasteel recipe."],
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    },
+    {
+      "id": "ancient-bark-scope",
+      "title": "Ancient Bark uses; acquisition path not yet verified",
+      "category": "scope-note",
+      "aliases": ["ancient bark", "farm ancient bark", "pal tamer glasses", "air walker"],
+      "summary": "PalDB's 1.0 item record verifies Ancient Bark requirements for Pal Tamer's Glasses, Air Walker Mk I, Reptyro Charm, and Islander's Tool Belt. It does not expose a sufficiently traceable acquisition route on that item page, so the companion withholds a farming recommendation.",
+      "source_id": "paldb-ancient-bark-1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    },
+    {
+      "id": "ancient-technology-points-scope",
+      "title": "Ancient Technology Points overview; farm not yet verified",
+      "category": "scope-note",
+      "aliases": ["ancient technology points", "ancient tech points", "atp", "farm atp"],
+      "summary": "PalDB's 1.0 help record says powerful enemies may award Ancient Technology Points and that the points unlock Ancient Technology. A specific repeatable current-version farming route is not yet admitted, so the planner abstains from ranking one.",
+      "source_id": "paldb-ancient-tech-1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    }
+  ],
+  "locations": [
+    {
+      "id": "your-expedition-station",
+      "name": "Your base: Pal Expedition Station",
+      "kind": "plan_action",
+      "coordinate_status": "user-location",
+      "guidance": "Open the station at your base and choose the highest Core-yielding expedition you have unlocked.",
+      "source_id": "paldb-expeditions-1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    },
+    {
+      "id": "world-tree-region",
+      "name": "World Tree region",
+      "kind": "region",
+      "coordinate_status": "region-only",
+      "guidance": "Use this only if World Tree content is unlocked; exact audited coordinates are not bundled yet.",
+      "source_id": "paldb-core-1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    },
+    {
+      "id": "your-summoning-altar",
+      "name": "Your base: Summoning Altar",
+      "kind": "plan_action",
+      "coordinate_status": "user-location",
+      "guidance": "Use your own raid arena location. The companion does not assume a base coordinate.",
+      "source_id": "paldb-core-1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    },
+    {
+      "id": "your-pure-quartz-quarry",
+      "name": "Your base: Pure Quartz Quarry",
+      "kind": "plan_action",
+      "coordinate_status": "user-location",
+      "guidance": "Build at a base with appropriate Mining work capacity after obtaining the 100-Quartz bootstrap cost.",
+      "source_id": "paldb-pure-quartz-1.0",
+      "last_checked": "2026-07-13",
+      "confidence": "verified"
+    }
+  ],
+  "rules": [
+    {
+      "id": "core-expedition-ladder",
+      "title": "Farm Ancient Civilization Cores through expeditions",
+      "action": "Run the highest Core-yielding expedition currently unlocked at your Pal Expedition Station. At endgame levels, compare Dark Cave of Feybreak (2–3 guaranteed), Sunreach Isle (3–4 guaranteed), and World Tree (3–5 guaranteed) before committing expedition time.",
+      "rationale": "This is a repeatable base-side acquisition path with explicit current-version reward ranges, so it is the least disruptive first loop while you continue other progression.",
+      "when": {"min_level": 55, "tiers": ["late", "endgame"], "keywords": ["ancient civilization core", "ancient civilization cores", "core", "cores"]},
+      "fact_ids": ["ancient-core-expedition-yields"],
+      "destination_ids": ["your-expedition-station"],
+      "prerequisites": ["Pal Expedition Station", "The chosen expedition's listed tower-boss unlock"],
+      "priority": 100
+    },
+    {
+      "id": "core-world-tree-loop",
+      "title": "Combine World Tree Core sources",
+      "action": "If World Tree content is unlocked, combine its guaranteed 3–5 Core expedition with treasure and Ancient Relic Recycler checks instead of treating any one random source as the entire farm.",
+      "rationale": "The current reward table exposes several independent Core sources in the same content tier, making this a useful active-play alternative to waiting on expeditions.",
+      "when": {"min_level": 70, "tiers": ["endgame"], "keywords": ["ancient civilization core", "ancient civilization cores", "core", "cores"]},
+      "fact_ids": ["ancient-core-world-tree-sources"],
+      "destination_ids": ["world-tree-region"],
+      "prerequisites": ["World Tree access"],
+      "priority": 80
+    },
+    {
+      "id": "core-raid-loop",
+      "title": "Use raid bosses for active Core farming",
+      "action": "Use an encounter you can already clear reliably from the listed Core-dropping raid bosses; prefer this when you want active farming rather than passive expedition income.",
+      "rationale": "Current drop data confirms Core drops from multiple raid encounter tiers, but the companion does not yet have enough personal combat state to choose one safely for you.",
+      "when": {"min_level": 55, "tiers": ["late", "endgame"], "keywords": ["ancient civilization core", "ancient civilization cores", "core", "cores"]},
+      "fact_ids": ["ancient-core-raid-drops"],
+      "destination_ids": ["your-summoning-altar"],
+      "prerequisites": ["A Core-dropping raid slab", "A safe raid arena", "A team that clears the chosen encounter reliably"],
+      "priority": 70
+    },
+    {
+      "id": "quartz-quarry-automation",
+      "title": "Automate Pure Quartz at your current base",
+      "action": "If you can cover the bootstrap cost, build a Pure Quartz Quarry at an existing production base instead of relocating a base to natural nodes.",
+      "rationale": "At endgame levels the level-52 quarry is already in range, and it matches an automation-first play style while avoiding an unnecessary base rebuild.",
+      "when": {"min_level": 52, "tiers": ["late", "endgame"], "keywords": ["pure quartz", "quartz", "circuit board", "soralite ingot"]},
+      "fact_ids": ["pure-quartz-quarry"],
+      "destination_ids": ["your-pure-quartz-quarry"],
+      "prerequisites": ["Pure Quartz Quarry technology", "70 Stone", "100 Pure Quartz", "30 Paldium Fragments", "10 Ancient Civilization Parts"],
+      "priority": 100
+    },
+    {
+      "id": "quartz-expedition-bootstrap",
+      "title": "Bootstrap the quarry through the Snow expedition",
+      "action": "If the quarry's 100-Quartz cost is the blocker, run the Snow expedition at your Pal Expedition Station until the bootstrap amount is covered.",
+      "rationale": "The current reward table lists a guaranteed 20-40 Pure Quartz range, so this avoids recommending an unverified node route or a base relocation.",
+      "when": {"min_level": 35, "tiers": ["mid", "late", "endgame"], "keywords": ["pure quartz", "quartz", "circuit board", "soralite ingot"]},
+      "fact_ids": ["pure-quartz-expedition-bootstrap"],
+      "destination_ids": ["your-expedition-station"],
+      "prerequisites": ["Pal Expedition Station", "Snow expedition unlocked"],
+      "priority": 80
+    }
+  ]
+}

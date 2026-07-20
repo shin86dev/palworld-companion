@@ -1,0 +1,33 @@
+[project]
+name = "palworld-companion"
+version = "1.0.0"
+description = "Local deterministic Palworld planning companion"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+dependencies = [
+  "PySide6-Essentials==6.11.1",
+  "Pillow==12.3.0",
+  "cryptography==49.0.0",
+  "pyooz==0.0.8",
+  "pyuepak==0.2.8",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==9.1.1",
+  "pyinstaller==6.21.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+palworld_companion = ["data/*.json", "assets/*.png"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

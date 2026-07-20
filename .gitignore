@@ -1,0 +1,38 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# PalPlus personal state and diagnostics
+*.sqlite
+*.sqlite3
+*.db
+*.log
+palworld-companion-progress.json
+
+# Never publish installed-game or private map material
+*.pak
+*.uasset
+*.uexp
+*.usmap
+T_WorldMap.*
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,5 @@
+PySide6-Essentials==6.11.1
+Pillow==12.3.0
+cryptography==49.0.0
+pyooz==0.0.8
+pyuepak==0.2.8
