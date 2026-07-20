@@ -82,7 +82,8 @@ def test_blank_first_run_is_honest_and_routes_to_supported_work(monkeypatch, tmp
     assert not window.welcome_panel.isHidden()
     assert window.quick_start_button.isHidden()
     assert window.optional_context_panel.isHidden()
-    assert "Local only" in window.welcome_summary.text()
+    assert "Local first" in window.welcome_summary.text()
+    assert "only after you approve" in window.welcome_summary.text()
     assert not hasattr(window, "map_quickstart")
     assert window.destination_quickstart.isDefault()
     assert "top-right" in window.welcome_instruction.text()
@@ -795,6 +796,7 @@ def test_tray_exposes_explicit_quit_without_toggling_on_context_click(monkeypatc
     actions = {action.text(): action for action in menu.actions() if not action.isSeparator()}
 
     assert "Quit PalPlus" in actions
+    assert "Report a problem…" in actions
     actions["Quit PalPlus"].trigger()
     assert window.quit_requests == 1
     window._tray_activated(QSystemTrayIcon.ActivationReason.Context)

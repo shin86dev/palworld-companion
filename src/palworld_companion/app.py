@@ -35,6 +35,14 @@ from PySide6.QtWidgets import (
 )
 
 from .bundle import load_bundle
+from .diagnostics import (
+    DiagnosticSubmissionError,
+    build_report as build_diagnostic_report,
+    codex_handoff,
+    report_endpoint,
+    report_preview,
+    submit_report,
+)
 from .map_asset import (
     MapAssetError,
     find_palworld_pak,
@@ -873,6 +881,27 @@ class MapProvisionWorker(QObject):
         try:
             self.ready.emit(provision_local_maps())
         except Exception as error:
+            self.failed.emit(str(error))
+        finally:
+            self.finished.emit()
+
+
+class DiagnosticReportWorker(QObject):
+    """Send one user-approved report without blocking the companion window."""
+
+    sent = Signal(object)
+    failed = Signal(str)
+    finished = Signal()
+
+    def __init__(self, report: dict) -> None:
+        super().__init__()
+        self.report = report
+
+    @Slot()
+    def run(self) -> None:
+        try:
+            self.sent.emit(submit_report(self.report))
+        except DiagnosticSubmissionError as error:
             self.failed.emit(str(error))
         finally:
             self.finished.emit()
@@ -1931,6 +1960,8 @@ class CompanionWindow(QMainWindow):
         self.map_destination_target: dict | None = None
         self.path_overlay: PathOverlay | None = None
         self.destination_picker: DestinationPicker | None = None
+        self._report_thread: QThread | None = None
+        self._report_worker: DiagnosticReportWorker | None = None
         self.store.set_bundle_metadata(self.bundle["bundle_version"], self.bundle["game_version"])
         self.setWindowTitle("PalPlus 1.0")
         self.setMinimumSize(900, 600)
@@ -1964,8 +1995,11 @@ class CompanionWindow(QMainWindow):
         self.coverage_label.setToolTip(f"{status['status']}: {status['message']}")
         self.quick_start_button = QPushButton("Quick start")
         self.quick_start_button.clicked.connect(self._show_quick_start)
+        self.report_problem_button = QPushButton("Report a problem")
+        self.report_problem_button.clicked.connect(self._report_problem)
         status_row.addWidget(self.coverage_label, 1)
         status_row.addWidget(self.quick_start_button)
+        status_row.addWidget(self.report_problem_button)
         layout.addLayout(status_row)
 
         splitter = QSplitter(Qt.Orientation.Horizontal)
@@ -1984,7 +2018,10 @@ class CompanionWindow(QMainWindow):
         title = QLabel("Minimap is live")
         title.setStyleSheet("font-size: 16px; font-weight: 600; border: none")
         layout.addWidget(title)
-        self.welcome_summary = QLabel("Local only. No account, ads, writes, injection, automation, or LLM/API calls.")
+        self.welcome_summary = QLabel(
+            "Local first. No account, ads, writes, injection, automation, or background API calls. "
+            "Diagnostic reports are sent only after you approve them."
+        )
         self.welcome_summary.setStyleSheet("border: none")
         layout.addWidget(self.welcome_summary)
         self.welcome_instruction = QLabel(
@@ -2435,11 +2472,14 @@ class CompanionWindow(QMainWindow):
         choose_destination.triggered.connect(self.toggle_destination_picker)
         overlay_toggle = QAction("Show / hide minimap", self)
         overlay_toggle.triggered.connect(self._toggle_path_overlay)
+        report_problem = QAction("Report a problem…", self)
+        report_problem.triggered.connect(self._report_problem)
         self.tray_quit_action = QAction("Quit PalPlus", self)
         self.tray_quit_action.triggered.connect(self._quit_from_tray)
         menu.addAction(toggle)
         menu.addAction(choose_destination)
         menu.addAction(overlay_toggle)
+        menu.addAction(report_problem)
         menu.addSeparator()
         menu.addAction(self.tray_quit_action)
         self.tray.setContextMenu(menu)
@@ -2459,6 +2499,80 @@ class CompanionWindow(QMainWindow):
         app = QApplication.instance()
         if app is not None:
             app.quit()
+
+    def _confirm_diagnostic_report(self, report: dict) -> bool:
+        dialog = QMessageBox(self)
+        dialog.setWindowTitle("Send diagnostic report")
+        dialog.setIcon(QMessageBox.Icon.Information)
+        dialog.setText("Send this redacted diagnostic report to PalPlus support?")
+        dialog.setInformativeText(
+            "This is optional. PalPlus sends nothing automatically. The report excludes player position, "
+            "game saves, local paths, account details, and your local preferences."
+        )
+        dialog.setDetailedText(report_preview(report))
+        dialog.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.Cancel)
+        dialog.setDefaultButton(QMessageBox.StandardButton.Cancel)
+        return dialog.exec() == QMessageBox.StandardButton.Yes
+
+    def _report_problem(self) -> None:
+        if report_endpoint() is None:
+            QMessageBox.information(
+                self,
+                "Diagnostic reports unavailable",
+                "Diagnostic reporting is not configured in this build. You can still open a GitHub issue with a short description.",
+            )
+            return
+        overlay = self.path_overlay
+        report = build_diagnostic_report(
+            live_status=overlay.live_status if overlay is not None else None,
+            live_error=overlay.live_error if overlay is not None else None,
+            map_error=overlay.map_provision_error if overlay is not None else None,
+        )
+        if not self._confirm_diagnostic_report(report):
+            return
+        self._send_diagnostic_report(report)
+
+    def _send_diagnostic_report(self, report: dict) -> None:
+        if self._report_thread is not None:
+            return
+        self.report_problem_button.setEnabled(False)
+        self.report_problem_button.setText("Sending report…")
+        thread = QThread(self)
+        worker = DiagnosticReportWorker(report)
+        worker.moveToThread(thread)
+        thread.started.connect(worker.run)
+        worker.sent.connect(lambda receipt: self._diagnostic_report_sent(report, receipt))
+        worker.failed.connect(self._diagnostic_report_failed)
+        worker.finished.connect(thread.quit)
+        worker.finished.connect(worker.deleteLater)
+        thread.finished.connect(thread.deleteLater)
+        thread.finished.connect(self._diagnostic_report_finished)
+        self._report_thread = thread
+        self._report_worker = worker
+        thread.start()
+
+    @Slot(object)
+    def _diagnostic_report_sent(self, report: dict, receipt: dict) -> None:
+        handoff = codex_handoff(report, receipt)
+        clipboard = QApplication.clipboard()
+        if clipboard is not None:
+            clipboard.setText(handoff)
+        QMessageBox.information(
+            self,
+            "Diagnostic report sent",
+            f"Report {receipt['report_id']} was received. A short Codex handoff has been copied to your clipboard.",
+        )
+
+    @Slot(str)
+    def _diagnostic_report_failed(self, message: str) -> None:
+        QMessageBox.warning(self, "Diagnostic report not sent", message)
+
+    @Slot()
+    def _diagnostic_report_finished(self) -> None:
+        self._report_thread = None
+        self._report_worker = None
+        self.report_problem_button.setEnabled(True)
+        self.report_problem_button.setText("Report a problem")
 
     def generate_plan(self) -> None:
         try:

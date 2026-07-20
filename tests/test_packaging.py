@@ -28,6 +28,7 @@ def test_frozen_build_contains_release_assets_and_no_palradar():
     assert 'root / "src" / "palworld_companion" / "data"' in spec
     assert 'root / "src" / "palworld_companion" / "assets"' in spec
     assert "palplus.ico" in spec
+    assert "assets/*.json" in (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     assert "pal_radar.py" not in release_sources
     assert "pal-radar.json" not in release_sources
 
@@ -58,3 +59,5 @@ def test_public_readme_links_the_latest_installer_and_describes_privacy_precisel
     assert "https://github.com/shin86dev/palworld-companion/releases/latest/download/PalPlus-Setup.exe" in readme
     assert "The app does not upload that cache or your gameplay data." in readme
     assert "Map imagery is prepared privately from your own Palworld installation and is never uploaded." not in readme
+    assert "Railway-hosted support database" in readme
+    assert "No automatic cloud uploads or background telemetry" in readme

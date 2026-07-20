@@ -48,12 +48,18 @@ PalPlus runs locally on your PC. It has:
 
 - No account requirement
 - No ads or analytics
-- No cloud uploads
+- No automatic cloud uploads or background telemetry
 - No AI or LLM calls
 - No gameplay automation
 - No game-memory writes or injection
 
 PalPlus prepares its map cache from your local Palworld installation. The app does not upload that cache or your gameplay data.
+
+### Optional diagnostic reports
+
+If something breaks, you can click **Report a problem** in the companion or tray menu. PalPlus first shows the exact redacted report and sends it only after you approve. It includes the app version, Windows version, and sanitized error state—not player coordinates, saves, preferences, local paths, account details, or game files. Approved reports are stored in the project’s Railway-hosted support database so a report ID can be used in a productive Codex support task.
+
+Railway and the network provider necessarily process connection metadata to deliver that one request. PalPlus does not send reports automatically or use them for tracking.
 
 ## Troubleshooting
 
@@ -70,6 +76,8 @@ PalPlus checks compatibility locally after game updates. If it cannot validate t
 PalPlus displays a coordinate grid while it prepares the private local map cache.
 
 If something still looks wrong, open an issue with your Palworld version and a short description of what happened.
+
+If diagnostic reporting is available in your build, **Report a problem** also copies a short handoff you can paste into Codex after the report is received.
 
 ## Support PalPlus
 
