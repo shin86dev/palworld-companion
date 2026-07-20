@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches: [main]
-    tags: ["v1.0.0"]
+    tags: ["v*"]
   workflow_dispatch:
 
 permissions:
@@ -46,7 +46,7 @@ jobs:
         shell: pwsh
         run: |
           $compiler = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-          $version = if ($env:GITHUB_REF_TYPE -eq "tag") { "1.0.0" } else { "1.0.0-dev" }
+          $version = if ($env:GITHUB_REF_TYPE -eq "tag") { $env:GITHUB_REF_NAME.TrimStart("v") } else { "1.0.1-dev" }
           $repositoryUrl = "${{ github.server_url }}/${{ github.repository }}"
           & $compiler "/DMyAppVersion=$version" "/DMyAppURL=$repositoryUrl" packaging\PalPlus.iss
           if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed: $LASTEXITCODE" }
@@ -60,20 +60,22 @@ jobs:
       - name: Upload installer artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: PalPlus-Windows-1.0.0
+          name: PalPlus-Windows-${{ github.ref_name }}
           path: |
             dist/installer/PalPlus-Setup.exe
             dist/installer/PalPlus-Setup.exe.sha256
           if-no-files-found: error
 
-      - name: Publish v1.0.0 release
-        if: github.ref == 'refs/tags/v1.0.0'
+      - name: Publish tagged release
+        if: github.ref_type == 'tag'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release view v1.0.0 *> $null
+          $tag = $env:GITHUB_REF_NAME
+          $version = $tag.TrimStart("v")
+          gh release view $tag *> $null
           if ($LASTEXITCODE -ne 0) {
-            gh release create v1.0.0 --verify-tag --title "PalPlus v1.0.0" --notes-file RELEASE_NOTES.md
+            gh release create $tag --verify-tag --title "PalPlus v$version" --notes-file RELEASE_NOTES.md
           }
-          gh release upload v1.0.0 dist\installer\PalPlus-Setup.exe dist\installer\PalPlus-Setup.exe.sha256 --clobber
+          gh release upload $tag dist\installer\PalPlus-Setup.exe dist\installer\PalPlus-Setup.exe.sha256 --clobber

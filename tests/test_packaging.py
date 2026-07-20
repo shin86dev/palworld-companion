@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_installer_is_per_user_unsigned_and_preserves_personal_data():
     script = (ROOT / "packaging" / "PalPlus.iss").read_text(encoding="utf-8")
-    assert '#define MyAppVersion "1.0.0"' in script
+    assert '#define MyAppVersion "1.0.1"' in script
     assert "https://github.com/shin86dev/palworld-companion" in script
     assert "github.com/OWNER" not in script
     assert "PrivilegesRequired=lowest" in script
@@ -42,7 +42,8 @@ def test_workflow_is_a_single_minimal_release_job():
     assert "$process.ExitCode" in workflow
     assert "startup-error.log" in workflow
     assert "PalPlus-Setup.exe.sha256" in workflow
-    assert "refs/tags/v1.0.0" in workflow
+    assert 'tags: ["v*"]' in workflow
+    assert "github.ref_type == 'tag'" in workflow
     assert "matrix:" not in workflow
     assert "coverage" not in workflow.casefold()
 
@@ -50,8 +51,8 @@ def test_workflow_is_a_single_minimal_release_job():
 def test_release_metadata_has_one_version():
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     package = (ROOT / "src" / "palworld_companion" / "__init__.py").read_text(encoding="utf-8")
-    assert 'version = "1.0.0"' in pyproject
-    assert '__version__ = "1.0.0"' in package
+    assert 'version = "1.0.1"' in pyproject
+    assert '__version__ = "1.0.1"' in package
 
 
 def test_public_readme_links_the_latest_installer_and_describes_privacy_precisely():

@@ -1963,7 +1963,7 @@ class CompanionWindow(QMainWindow):
         self._report_thread: QThread | None = None
         self._report_worker: DiagnosticReportWorker | None = None
         self.store.set_bundle_metadata(self.bundle["bundle_version"], self.bundle["game_version"])
-        self.setWindowTitle("PalPlus 1.0")
+        self.setWindowTitle("PalPlus 1.0.1")
         self.setMinimumSize(900, 600)
         self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
         self._build_ui()
